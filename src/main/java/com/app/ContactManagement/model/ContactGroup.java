@@ -17,8 +17,21 @@ public class ContactGroup {
     @ManyToOne
     @JoinColumn(name = "groupe_id")
     private Groupe groupe;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public ContactGroup() {
+    
+    public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public ContactGroup() {
     }
 
     public ContactGroup(Contact contact, Groupe groupe) {

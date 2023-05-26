@@ -280,7 +280,7 @@ public class Navigator {
 		
 		model.addAttribute("queryGroups", groups);
 		Groupe groupSelected = groupRepository.findByid(Long.parseLong(group));
-		List<ContactGroup> contacts = contactGroupRepository.findBygroupe(groupSelected);
+		List<ContactGroup> contacts = contactGroupRepository.findBygroupeAndUser(groupSelected, userDetails.getUser());
 
 		System.out.println(groupSelected.getName());
 		model.addAttribute("groupname", groupSelected.getName());

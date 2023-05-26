@@ -26,6 +26,9 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private List<LoginCounter> logins;
+	
+	@OneToMany(mappedBy = "user")
+	private List<ContactGroup> contactGroups;
 
 	public User() {
 
@@ -70,6 +73,16 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	
+
+	public List<ContactGroup> getContactGroups() {
+		return contactGroups;
+	}
+
+	public void setContactGroups(List<ContactGroup> contactGroups) {
+		this.contactGroups = contactGroups;
 	}
 
 	@Override

@@ -48,8 +48,6 @@ public class GroupController {
 			groupServiceImpl.addGroup(group);
 		}
 		
-		
-		
 		List<Groupe> groups = groupServiceImpl.listOfGroups(userDetails.getUser());
 		
 		model.addAttribute("groups", groups);
@@ -59,12 +57,14 @@ public class GroupController {
 	
 	@PostMapping("/deleteGroup")
 	public String deleteGroup(@ModelAttribute("DeleteGroup") DeleteGroup formData, Model model) {
-        
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		
         String groupId = formData.getGroupIdToDelete();
         System.out.println(groupId);
         
         Groupe group = groupRepository.findByid(Long.parseLong(groupId));
-        List<ContactGroup> cg = contactGroupRepository.findBygroupe(group);
+        List<ContactGroup> cg = contactGroupRepository.findBygroupeAndUser(group, userDetails.getUser());
         for(ContactGroup c: cg) {
         	contactGroupRepository.delete(c);
         }
@@ -77,7 +77,8 @@ public class GroupController {
 	
 	@PostMapping("/form")
     public String processForm(@ModelAttribute("addContactToGroup") AddContactToGroup formData) {
-        
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 		List<String> contactIds = formData.getContactsList();
         
         String groupId = formData.getGroupId();
@@ -90,6 +91,7 @@ public class GroupController {
         	ContactGroup cg = new ContactGroup();
         	cg.setContact(contact);
         	cg.setGroupe(group);
+        	cg.setUser(userDetails.getUser());
         	contactGroupRepository.save(cg);
         	
         }
