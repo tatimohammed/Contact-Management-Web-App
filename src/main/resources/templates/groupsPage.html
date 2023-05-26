@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/groupsStyle.css">
+<script src="/js/scripts.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+	crossorigin="anonymous">
+<title>Contact Management</title>
+</head>
+
+<body>
+	<div class="container-lg" id="main">
+
+		<div class="row" id="home">
+			<div class="col-3" id="items">
+				<h2>Contacts List</h2>
+				<hr style="border-top: dotted 1px;">
+				<div class="text-center">
+					<form id="searchForm" th:action="@{/search}" method="get">
+						<input type="text" placeholder="Search.." id="searchInput"
+							name="query"> <input type="submit" style="display: none">
+					</form>
+				</div>
+				<hr>
+				<div id="table">
+					<table th:if="${contacts != null and queryresult == null}">
+						<tr th:each="contact : ${contacts}">
+							<td id="logo"><i class="bi bi-person-lines-fill"></i></td>
+							<td><a th:href="@{/home(contactId=${contact.id})}"><b
+									th:text="${contact.last_name}"></b> <b
+									th:text="${contact.first_name}"></b><br> <span
+									th:text="${contact.phone1}"></span></a></td>
+						</tr>
+					</table>
+					<table th:if="${queryresult != null}">
+						<tr th:each="contact : ${queryresult}">
+							<td id="logo"><i class="bi bi-person-lines-fill"></i></td>
+							<td><a th:href="@{/home(contactId=${contact.id})}"><b
+									th:text="${contact.last_name}"></b> <b
+									th:text="${contact.first_name}"></b><br> <span
+									th:text="${contact.phone1}"></span></a></td>
+						</tr>
+					</table>
+					<div class="text-center mt-5"
+						th:if="${(contacts == null or contacts.size() == 0) and queryresult == null}">
+						<p>No contacts to show yet!</p>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-9">
+				<div class="row mt-2">
+					<div class="col-10">
+						<h4 id="current-time"></h4>
+					</div>
+					<div class="col-2">
+						<a href="/logout" class="btn" id="logout"> Logout <b><i
+								class="bi bi-box-arrow-right"></i></b></a>
+					</div>
+
+				</div>
+				<div class="nav-justified" id="nav">
+					<a href="/home">Home</a> <a href="/add">Add Contact</a> <a
+						href="/update">Update Contact</a> <a href="/delete">Delete
+						Contact</a> <a href="/search">Search Contact</a> <a href="/group"
+						id="add">Groups</a>
+				</div>
+				<div class="add-contact">
+					<div class="row">
+						<div class="col-3" id="groups">
+							<h2>Your Groups</h2>
+							<div class="text-center">
+								<form id="searchForm" th:action="@{/group}" method="get">
+									<input type="text" placeholder="Search groups.." id="searchGroup"
+										name="query"> <input type="submit"
+										style="display: none">
+								</form>
+							</div>
+							<hr>
+							<div id="table">
+								<table th:if="${groups != null and queryGroups == null}">
+									<tr th:each="group : ${groups}">
+										<td id="logo"><i class="bi bi-box-fill"></i></td>
+										<td><a th:href="@{/group(groupId=${group.id})}"
+											class="group-link"> <b th:text="${group.name}"></b>
+										</a></td>
+									</tr>
+								</table>
+								<table th:if="${queryGroups != null}">
+									<tr th:each="group : ${queryGroups}">
+										<td id="logo"><i class="bi bi-box-fill"></i></td>
+										<td><a th:href="@{/group(groupId=${group.id})}"
+											class="group-link"> <b th:text="${group.name}"></b>
+										</a></td>
+									</tr>
+								</table>
+								<div class="text-center mt-5"
+									th:if="${groups == null or groups.size() == 0}">
+									<p>No groups to show yet!</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-3" id="showed-groups" style="display: none;">
+							<a th:href="@{/group}"><i class="bi bi-box-arrow-left"></i></a>
+							<h2 th:text="${groupname}"></h2>
+							<hr>
+							<div id="table">
+								<table th:if="${groupContacts != null}">
+									<tr th:each="contact : ${groupContacts}">
+										<td id="logo"><i class="bi bi-person-lines-fill"></i></td>
+										<td><b th:text="${contact.last_name}"></b> <b
+											th:text="${contact.first_name}"></b><br> <span
+											th:text="${contact.phone1}"></span></td>
+									</tr>
+								</table>
+								<div class="text-center mt-5"
+											th:if="${groupContacts == null or groupContacts.size() == 0}">
+											<p>You haven't add any contact yet!</p>
+										</div>
+							</div>
+						</div>
+						<div class="col-5" id="add-group">
+							<h2 class="text-center mt-2">Add Group</h2>
+							<hr>
+							<div id="form-group" class="row">
+								<form th:action="@{/addGroup}" method="post" class="text-center">
+									<div>
+										<input type="text" placeholder="Group name" id="groupname"
+											name="groupname">
+									</div>
+									<div>
+										<label for="submit"> <a id="addArrow"><i
+												class="bi bi-plus-circle-fill"></i></a>
+										</label> <input type="submit" id="submit" style="display: none">
+									</div>
+								</form>
+								<hr>
+								<form th:action="@{/form}" th:object="${addContactToGroup}"
+									method="post">
+									<div id="myTable">
+										<p>
+											<b>Add contacts to a group</b>
+										</p>
+										<table th:if="${contacts != null}">
+											<tr th:each="contact : ${contacts}">
+												<td><input type="checkbox" th:field="*{contactsList}"
+													th:value="${contact.id}"> <a> <span
+														th:text="${contact.last_name}"></span> <span
+														th:text="${contact.first_name}"></span>
+												</a></td>
+											</tr>
+										</table>
+										<div class="text-center mt-5"
+											th:if="${contacts == null or contacts.size() == 0}">
+											<p>No contacts to show yet!</p>
+										</div>
+									</div>
+									<div class="text-center mt-3">
+										<select th:field="*{groupId}">
+											<option value="" disabled="disabled" selected="selected">Choose
+												a Group</option>
+											<option th:each="group : ${groups}" th:value="${group.id}"
+												th:text="${group.name}"></option>
+										</select>
+									</div>
+									<div class="text-center mt-1">
+										<label for="sub" id="addtogroup"> <i
+											class="bi bi-check-circle-fill"></i></label> <input type="submit"
+											id="sub" style="display: none">
+									</div>
+								</form>
+								<hr>
+								<form th:action="@{/deleteGroup}" th:object="${DeleteGroup}"
+									method="post">
+									<p class="mb-1">
+										<b>Delete a group</b>
+									</p>
+									<div class="text-center">
+										<select th:field="*{groupIdToDelete}">
+											<option value="" disabled="disabled" selected="selected">Choose
+												a Group</option>
+											<option th:each="group : ${groups}" th:value="${group.id}"
+												th:text="${group.name}"></option>
+										</select>
+									</div>
+									<div class="text-center">
+										<label for="del" id="dele"> <i
+											class="bi bi-dash-circle-fill"></i>
+										</label> <input type="submit" id="del" style="display: none">
+									</div>
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		// Get the value of groupId
+		var currentPageUrl = window.location.href;
+		var pattern = /^http:\/\/localhost:8080\/group\?groupId=/;
+		// Check the value of groupId and show/hide the div accordingly
+		if (pattern.test(currentPageUrl)) {
+			document.getElementById("showed-groups").style.display = "block"; // Show the div
+		} else {
+			document.getElementById("showed-groups").style.display = "none"; // Hide the div
+		}
+	</script>
+</body>
+</html>

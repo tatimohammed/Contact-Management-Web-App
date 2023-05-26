@@ -1,0 +1,147 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-image: linear-gradient(to bottom right, #d3c1ff, #d9d9d9);
+    background-repeat: no-repeat;
+    height: 90.5vh;
+}
+#logout{
+    border-radius: 10px;
+    margin-bottom: 0;
+    margin-top: 1%;
+    margin-left: 87%;
+    border: 1px solid white;
+    background-color: rgb(30, 0, 74);
+    color: white;
+    transition: 0.5s;
+    padding-left: 1%;
+    padding-right: 1%;
+    font-size: 20px;
+}
+#logout:hover{
+    background-color: white;
+    border: 1px solid rgb(30, 0, 74);
+    color: rgb(30, 0, 74);
+    font-weight: bold;
+}
+
+
+#login-bg{
+    margin-top: 7%;
+    border-radius: 15px;
+    border: 2px solid white;
+    box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.23);
+    background-image: url(../rsc/bg-form.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 80vh;
+}
+
+#form{
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px 0 0 10px;
+    color: rgb(30, 0, 74);
+}
+
+#form h2{
+   
+    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 0%;
+}
+
+#form #logo{
+    text-align: center;
+    font-size: 100px;
+}
+
+#form label{
+    margin-left: 10%;
+    font-size: 20px;
+    margin-bottom: 1%;
+}
+
+#form input{
+    text-align: left;
+    width: 80%;
+    margin-bottom: 7%;
+    padding: 10px;
+    margin-left: 10%;
+    font-size: 20px;
+    border: 1px solid rgb(30, 0, 74);
+    border-radius: 10px;
+    outline: auto;
+    color: rgb(30, 0, 74);
+}
+
+
+
+#form #signup{
+    text-align: left;
+    margin-left: 10%;
+}
+
+#form #btn{
+    border-radius: 10px;
+    margin-bottom: 0;
+    margin-top: 5%;
+    background-color: rgb(30, 0, 74);
+    color: white;
+    text-align: center;
+    transition: 0.5s;
+}
+
+#login-btn a{
+	border-radius: 10px;
+    margin-bottom: 0;
+    font-weight: bold;
+    margin-left: 90%;
+    margin-top: 2%;
+    color: rgb(30, 0, 74);
+    background-color: white;
+    text-align: center;
+    transition: 0.5s;
+}
+
+#login-btn a:hover{
+    background-color: rgb(30, 0, 74);
+    color: white;
+    border: 1px solid white;
+
+}
+
+#form #btn:hover{
+    background-color: rgb(60, 25, 110);
+
+}
+
+#login-bg p{
+    text-align: center;
+    margin-top: 2%;
+    margin-bottom: 0;
+}
+
+#robot{
+	color: white;
+	font-size: 40px;
+	margin-left: 50%;
+}
+
+#robot-msg{
+	margin-top: 45%;
+}
+
+#robot-msg #msg{
+	background-color: white;
+	width: 50%;
+	color: rgb(30, 0, 74);
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	margin-top: 0;
+	border-radius: 15px 0px 15px 15px;
+}
