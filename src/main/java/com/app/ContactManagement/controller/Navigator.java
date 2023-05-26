@@ -10,19 +10,16 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.ContactManagement.model.Contact;
 import com.app.ContactManagement.model.ContactGroup;
 import com.app.ContactManagement.model.LoginCounter;
 import com.app.ContactManagement.model.Trash;
-import com.app.ContactManagement.model.User;
 import com.app.ContactManagement.repository.ContactRepository;
 import com.app.ContactManagement.repository.GroupRepository;
 import com.app.ContactManagement.repository.LoginCounterRepository;

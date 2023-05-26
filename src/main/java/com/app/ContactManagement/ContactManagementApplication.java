@@ -11,5 +11,6 @@ public class ContactManagementApplication {
 		SpringApplication.run(ContactManagementApplication.class, args);
 	}
 	
+	
 
 }
