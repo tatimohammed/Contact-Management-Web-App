@@ -22,7 +22,7 @@ public class User {
 	private List<Contact> contacts;
 	
 	@OneToMany(mappedBy = "user")
-	private List<ContactGroup> userGroups;
+	private List<Groupe> userGroups;
 	
 	@OneToMany(mappedBy = "user")
 	private List<LoginCounter> logins;

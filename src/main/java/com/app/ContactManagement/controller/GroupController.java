@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.ContactManagement.model.Contact;
 import com.app.ContactManagement.model.ContactGroup;
+import com.app.ContactManagement.model.Groupe;
+import com.app.ContactManagement.repository.ContactGroupRepository;
 import com.app.ContactManagement.repository.ContactRepository;
 import com.app.ContactManagement.repository.GroupRepository;
 import com.app.ContactManagement.service.GroupServiceImpl;
@@ -21,6 +23,9 @@ import com.app.ContactManagement.utils.DeleteGroup;
 
 @Controller
 public class GroupController {
+	
+	@Autowired
+	private ContactGroupRepository contactGroupRepository;
 	
 	@Autowired
 	private GroupServiceImpl groupServiceImpl;
@@ -38,14 +43,14 @@ public class GroupController {
 				.getPrincipal();
 		
 		if (groupname != "") {
-			ContactGroup group = new ContactGroup(groupname, userDetails.getUser());
+			Groupe group = new Groupe(groupname, userDetails.getUser());
 			
 			groupServiceImpl.addGroup(group);
 		}
 		
 		
 		
-		List<ContactGroup> groups = groupServiceImpl.listOfGroups(userDetails.getUser());
+		List<Groupe> groups = groupServiceImpl.listOfGroups(userDetails.getUser());
 		
 		model.addAttribute("groups", groups);
 		
@@ -58,15 +63,12 @@ public class GroupController {
         String groupId = formData.getGroupIdToDelete();
         System.out.println(groupId);
         
-        ContactGroup group = groupRepository.findByid(Long.parseLong(groupId));
-        
-        List<Contact> contacts = contactRepository.findByGroupId(Long.parseLong(groupId));
-        
-        for (Contact contact: contacts) {
-        	contact.setGroupId(null);
+        Groupe group = groupRepository.findByid(Long.parseLong(groupId));
+        List<ContactGroup> cg = contactGroupRepository.findBygroupe(group);
+        for(ContactGroup c: cg) {
+        	contactGroupRepository.delete(c);
         }
         contactRepository.flush();
-		
         groupRepository.delete(group);
         groupRepository.flush();
         
@@ -75,19 +77,22 @@ public class GroupController {
 	
 	@PostMapping("/form")
     public String processForm(@ModelAttribute("addContactToGroup") AddContactToGroup formData) {
-        List<String> contactIds = formData.getContactsList();
+        
+		List<String> contactIds = formData.getContactsList();
         
         String groupId = formData.getGroupId();
         System.out.println(groupId);
         
-        ContactGroup group = groupRepository.findByid(Long.parseLong(groupId));
+        Groupe group = groupRepository.findByid(Long.parseLong(groupId));
         
         for (String contactId: contactIds) {
         	Contact contact = contactRepository.findByid(Long.parseLong(contactId));
-        	contact.setGroupId(group);
+        	ContactGroup cg = new ContactGroup();
+        	cg.setContact(contact);
+        	cg.setGroupe(group);
+        	contactGroupRepository.save(cg);
         	
         }
-        contactRepository.flush();
         
         return "redirect:/group";
     }

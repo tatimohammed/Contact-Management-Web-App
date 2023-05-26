@@ -16,9 +16,6 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 	
 	public Contact findByid(Long id);
 	
-	@Query("SELECT c FROM Contact c WHERE c.groupId.id = :groupId")
-    List<Contact> findByGroupId(Long groupId);
-	
 	List<Contact> findByUserIdOrderByLastNameAsc(User user);
 	
 	List<Contact> findByUserIdAndLastNameContainingOrderByLastNameAsc(User user, String query);

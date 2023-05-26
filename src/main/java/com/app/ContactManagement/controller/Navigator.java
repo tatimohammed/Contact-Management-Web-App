@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.app.ContactManagement.model.Contact;
 import com.app.ContactManagement.model.ContactGroup;
+import com.app.ContactManagement.model.Groupe;
 import com.app.ContactManagement.model.LoginCounter;
 import com.app.ContactManagement.model.Trash;
+import com.app.ContactManagement.repository.ContactGroupRepository;
 import com.app.ContactManagement.repository.ContactRepository;
 import com.app.ContactManagement.repository.GroupRepository;
 import com.app.ContactManagement.repository.LoginCounterRepository;
@@ -36,6 +38,9 @@ public class Navigator {
 
 	@Autowired
 	private ContactServiceImpl contactServiceImpl;
+	
+	@Autowired
+	private ContactGroupRepository contactGroupRepository;
 
 	private int count;
 
@@ -95,7 +100,7 @@ public class Navigator {
 
 		model.addAttribute("contacts", contacts);
 
-		List<ContactGroup> groups = groupServiceImpl.listOfGroups(userDetails.getUser());
+		List<Groupe> groups = groupServiceImpl.listOfGroups(userDetails.getUser());
 
 		model.addAttribute("groups", groups);
 
@@ -174,7 +179,11 @@ public class Navigator {
 		}
 		System.out.println("Contact To delete: " + id);
 		Contact c = contactRepository.findByid(Long.parseLong(id));
-
+		List<ContactGroup> cg = contactGroupRepository.findBycontact(c);
+		for(ContactGroup con : cg) {
+			con.setContact(null);
+		}
+		contactGroupRepository.flush();
 		Trash t = new Trash();
 		t.setFirst_name(c.getFirst_name());
 		t.setLastName(c.getLast_name());
@@ -182,12 +191,6 @@ public class Navigator {
 		t.setEmail_personal(c.getEmail_personal());
 		t.setEmail_professional(c.getEmail_professional());
 		t.setGender(c.getGender());
-		if (c.getGroupId() != null) {
-			t.setGroupId(c.getGroupId().getId());
-		} else {
-			t.setGroupId(null);
-		}
-
 		t.setUserId(c.getUserId().getId());
 		t.setPhone1(c.getPhone1());
 		t.setPhone2(c.getPhone2());
@@ -267,27 +270,26 @@ public class Navigator {
 			if(query.equals("")) {
 				return "groupsPage";
 			}
-			List<ContactGroup> groups = groupRepository.findByUserAndNameContaining(userDetails.getUser(), query);
+			List<Groupe> groups = groupRepository.findByUserAndNameContaining(userDetails.getUser(), query);
 			
 			model.addAttribute("queryGroups", groups);
 			return "groupsPage";
 		}
 		
-		List<ContactGroup> groups = groupRepository.findByUserAndNameContaining(userDetails.getUser(), query);
+		List<Groupe> groups = groupRepository.findByUserAndNameContaining(userDetails.getUser(), query);
 		
 		model.addAttribute("queryGroups", groups);
-		
-		List<Contact> contacts = contactRepository.findByGroupId(Long.parseLong(group));
-
-		ContactGroup groupSelected = groupRepository.findByid(Long.parseLong(group));
+		Groupe groupSelected = groupRepository.findByid(Long.parseLong(group));
+		List<ContactGroup> contacts = contactGroupRepository.findBygroupe(groupSelected);
 
 		System.out.println(groupSelected.getName());
 		model.addAttribute("groupname", groupSelected.getName());
-
-		for (Contact c : contacts) {
-			System.out.println(c.getLast_name());
+		
+		List<Contact> cs = new ArrayList<>();
+		for (ContactGroup c : contacts) {
+			cs.add(c.getContact());
 		}
-		model.addAttribute("groupContacts", contacts);
+		model.addAttribute("groupContacts", cs);
 		return "groupsPage";
 	}
 
@@ -301,7 +303,6 @@ public class Navigator {
 		c.setEmail_professional(t.getEmail_professional());
 		c.setFirst_name(t.getFirst_name());
 		c.setGender(t.getGender());
-		c.setGroupId(groupRepository.findByid(t.getGroupId()));
 		c.setLast_name(t.getLastName());
 		c.setPhone1(t.getPhone1());
 		c.setPhone2(t.getPhone2());

@@ -1,5 +1,7 @@
 package com.app.ContactManagement.model;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 
@@ -31,11 +33,8 @@ public class Contact {
 	@JoinColumn(name = "user_id")
 	private User userId;
 	
-	@ManyToOne
-	@JoinColumn(name = "group_id")
-	private ContactGroup groupId;
-	
-	
+	@OneToMany(mappedBy = "contact")
+	private List<ContactGroup> contactGroup;
 
 	public User getUserId() {
 		return userId;
@@ -94,14 +93,6 @@ public class Contact {
 
 	public void setPhone1(String phone1) {
 		this.phone1 = phone1;
-	}
-
-	public ContactGroup getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(ContactGroup groupId) {
-		this.groupId = groupId;
 	}
 
 	public String getPhone2() {

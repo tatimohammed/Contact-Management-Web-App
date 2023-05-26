@@ -1,61 +1,52 @@
 package com.app.ContactManagement.model;
 
-import java.util.List;
-
 import javax.persistence.*;
 
 @Entity
+@Table(name = "contact_group")
 public class ContactGroup {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String name;
-	
-	@OneToMany(mappedBy = "groupId")
-	private List<Contact> contacts;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	
-	
-	
 
-	public ContactGroup() {
-		
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public ContactGroup(String name, User user) {
-		super();
-		this.name = name;
-		this.user = user;
-	}
+    @ManyToOne
+    @JoinColumn(name = "contact_id")
+    private Contact contact;
 
-	public Long getId() {
-		return id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "groupe_id")
+    private Groupe groupe;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public ContactGroup() {
+    }
 
-	public String getName() {
-		return name;
-	}
+    public ContactGroup(Contact contact, Groupe groupe) {
+        this.contact = contact;
+        this.groupe = groupe;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
+    public Long getId() {
+        return id;
+    }
 
-	
-	
-	
-	
-	
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public Groupe getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(Groupe groupe) {
+        this.groupe = groupe;
+    }
 }

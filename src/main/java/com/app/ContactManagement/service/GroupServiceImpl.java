@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.app.ContactManagement.model.ContactGroup;
+import com.app.ContactManagement.model.Groupe;
 import com.app.ContactManagement.model.User;
 import com.app.ContactManagement.repository.GroupRepository;
 
@@ -16,13 +16,13 @@ public class GroupServiceImpl implements GroupService{
 	private GroupRepository groupRepository;
 
 	@Override
-	public ContactGroup addGroup(ContactGroup group) {
+	public Groupe addGroup(Groupe group) {
 		
 		return groupRepository.save(group);
 	}
 
 	@Override
-	public List<ContactGroup> listOfGroups(User user) {
+	public List<Groupe> listOfGroups(User user) {
 		
 		return groupRepository.findByUser(user);
 	}
