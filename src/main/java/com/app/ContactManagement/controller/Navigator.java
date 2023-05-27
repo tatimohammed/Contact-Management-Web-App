@@ -3,7 +3,9 @@ package com.app.ContactManagement.controller;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -235,18 +237,19 @@ public class Navigator {
 		// Matcher for Last Name
 		Matcher phoneMatcher = phonePattern.matcher(query);
 
-		List<Contact> contacts = null;
+		Set<Contact> contacts = null;
 		if (lastNameMatcher.matches()) {
 			contacts = contactRepository.findByUserIdAndLastNameContainingOrderByLastNameAsc(userDetails.getUser(),
 					query);
 		} else if (phoneMatcher.matches()) {
-			List<Contact> contacts1 = contactRepository.findByUserIdAndPhone1ContainingOrderByLastNameAsc(userDetails.getUser(),
+			Set<Contact> contacts1 = contactRepository.findByUserIdAndPhone1ContainingOrderByLastNameAsc(userDetails.getUser(),
 					query);
 			
-			List<Contact> contacts2 = contactRepository.findByUserIdAndPhone2ContainingOrderByLastNameAsc(userDetails.getUser(),
+			Set<Contact> contacts2 = contactRepository.findByUserIdAndPhone2ContainingOrderByLastNameAsc(userDetails.getUser(),
 					query);
-			contacts = new ArrayList<>(contacts1);
+			contacts = new HashSet<>(contacts1);
 			contacts.addAll(contacts2);
+			
 		} 
 
 		for (Contact c : contacts) {

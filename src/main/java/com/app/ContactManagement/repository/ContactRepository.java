@@ -1,9 +1,9 @@
 package com.app.ContactManagement.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.app.ContactManagement.model.Contact;
@@ -18,10 +18,10 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 	
 	List<Contact> findByUserIdOrderByLastNameAsc(User user);
 	
-	List<Contact> findByUserIdAndLastNameContainingOrderByLastNameAsc(User user, String query);
+	Set<Contact> findByUserIdAndLastNameContainingOrderByLastNameAsc(User user, String query);
 	
-	List<Contact> findByUserIdAndPhone1ContainingOrderByLastNameAsc(User user, String query);
+	Set<Contact> findByUserIdAndPhone1ContainingOrderByLastNameAsc(User user, String query);
 	
-	List<Contact> findByUserIdAndPhone2ContainingOrderByLastNameAsc(User user, String query);
+	Set<Contact> findByUserIdAndPhone2ContainingOrderByLastNameAsc(User user, String query);
 	
 }
