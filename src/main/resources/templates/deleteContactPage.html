@@ -27,8 +27,7 @@
 				<div class="text-center">
 					<form id="searchForm" th:action="@{/search}" method="get">
 						<input type="text" placeholder="Search.." id="searchInput"
-							name="query">
-							<input type="submit" style="display: none">
+							name="query"> <input type="submit" style="display: none">
 					</form>
 				</div>
 				<hr>
@@ -75,29 +74,36 @@
 						Contact</a> <a href="/search">Search Contact</a> <a href="/group">Groups</a>
 				</div>
 				<div class="add-contact text-center">
-					<table id="trash" class="mt-3" th:if="${trashs != null}">
-						<tr>
-							<th>Last Name</th>
-							<th>First Name</th>
-							<th>Phone Number I</th>
-							<th>Address</th>
-							<th>Professional Email</th>
-							<th>Gender</th>
-							<th>Restore</th>
-						</tr>
-						<tr th:each="trash : ${trashs}">
-							<td th:text="${trash.lastName}"></td>
-							<td th:text="${trash.first_name}"></td>
-							<td th:text="${trash.phone1}"></td>
-							<td th:text="${trash.address}"></td>
-							<td th:text="${trash.email_professional}"></td>
-							<td th:text="${trash.gender}">M</td>
-							<td><a th:href="@{/restore(trashId=${trash.id})}"><i class="bi bi-arrow-clockwise"></i></a></td>
-						</tr>
-						
-					</table>
-					<div th:if="${trashs == null or trashs.size() == 0}" class="text-center mt-5">
-						<p style="color: rgb(30, 0, 74);">Empty Trash!</p>
+					<div id="trashTable">
+						<table id="trash" class="mt-3" th:if="${trashs != null}">
+							<tr>
+								<th>Last Name</th>
+								<th>First Name</th>
+								<th>Phone Number I</th>
+								<th>Address</th>
+								<th>Professional Email</th>
+								<th>Gender</th>
+								<th>Restore</th>
+							</tr>
+							<tr th:each="trash : ${trashs}">
+								<td th:text="${trash.lastName}"></td>
+								<td th:text="${trash.first_name}"></td>
+								<td th:text="${trash.phone1}"></td>
+								<td th:text="${trash.address}"></td>
+								<td th:text="${trash.email_professional}"></td>
+								<td th:text="${trash.gender}">M</td>
+								<td><a th:href="@{/restore(trashId=${trash.id})}"><i
+										class="bi bi-arrow-clockwise"></i></a></td>
+							</tr>
+
+						</table>
+						<div th:if="${trashs == null or trashs.size() == 0}"
+							class="text-center mt-5">
+							<p style="color: rgb(30, 0, 74);">Empty Trash!</p>
+						</div>
+					</div>
+					<div>
+						<a id="empty" th:href="@{/emptyTrash}" class="btn btn-primary mt-2">Empty Trash</a>
 					</div>
 				</div>
 			</div>

@@ -110,10 +110,12 @@ body{
     width: 98%;
     margin-left: 1%;
     height: 65vh;
-    overflow: scroll;
     background-color: white;
 }
-
+#trashTable{
+	height: 60vh;
+    overflow: scroll;
+}
 #trash{
     width: 100%;
     font-size: 15px;
@@ -128,6 +130,9 @@ body{
 #trash a{
     cursor: pointer;
     font-size: 20px;
+}
+#empty{
+	background-color: rgb(30, 0, 74);
 }
 
 
