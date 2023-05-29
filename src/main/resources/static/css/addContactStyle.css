@@ -145,6 +145,7 @@ body{
     margin-bottom: 0;
     border: 1px solid white;
     background-color: rgb(30, 0, 74);
+    box-shadow: 0 6px 8px 0 rgba(30, 0, 74, 0.4), 0 6px 20px 0 rgba(30, 0, 74, 0.23);
     color: white;
     transition: 0.5s;
     padding-left: 3%;
