@@ -109,8 +109,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-3" id="showed-groups" style="display: none;">
-							<a th:href="@{/group}"><i class="bi bi-box-arrow-left"></i></a>
+						<div class="col-4" id="showed-groups" style="display: none;">
+							<a th:href="@{/group}"><i id="arrow-left" class="bi bi-box-arrow-left"></i></a>
 							<h2 th:text="${groupname}"></h2>
 							<hr>
 							<div id="table">
@@ -120,6 +120,7 @@
 										<td><b th:text="${contact.last_name}"></b> <b
 											th:text="${contact.first_name}"></b><br> <span
 											th:text="${contact.phone1}"></span></td>
+										<td id="logo"><a th:href="@{/dropContact(contactId=${contact.id})}"><i class="bi bi-trash3-fill"></i></a></td>
 									</tr>
 								</table>
 								<div class="text-center mt-5"
@@ -128,7 +129,7 @@
 										</div>
 							</div>
 						</div>
-						<div class="col-5" id="add-group">
+						<div class="col-4" id="add-group">
 							<h2 class="text-center mt-2">Add Group</h2>
 							<hr>
 							<div id="form-group" class="row">

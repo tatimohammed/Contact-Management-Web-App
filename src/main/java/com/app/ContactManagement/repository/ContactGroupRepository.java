@@ -17,5 +17,6 @@ public interface ContactGroupRepository extends JpaRepository<ContactGroup, Long
 	
 	public List<ContactGroup> findBycontact(Contact contact); 
 	
+	public ContactGroup findBygroupeAndUserAndContact(Groupe groupe, User user, Contact contact);
 	
 }

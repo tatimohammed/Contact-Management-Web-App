@@ -3,8 +3,10 @@ package com.app.ContactManagement.controller;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +43,8 @@ public class Navigator {
 	@Autowired
 	private ContactServiceImpl contactServiceImpl;
 	
+	private Model modelGlobal;
+	
 	@Autowired
 	private ContactGroupRepository contactGroupRepository;
 
@@ -64,6 +68,28 @@ public class Navigator {
 	@Autowired
 	private GroupRepository groupRepository;
 
+	
+	public Model getModelGlobal() {
+		return modelGlobal;
+	}
+
+	@GetMapping("/dropContact")
+	public String dropContact(@RequestParam(name="contactId") String id) {
+		
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		
+		String groupSelectedId = (String) modelGlobal.getAttribute("groupSelectedId");
+		Contact c = contactRepository.findByid(Long.parseLong(id));
+		Groupe g = groupRepository.findByid(Long.parseLong(groupSelectedId));
+		ContactGroup cg = contactGroupRepository.findBygroupeAndUserAndContact(g, userDetails.getUser(), c);
+		
+		contactGroupRepository.delete(cg);
+		contactGroupRepository.flush();
+		
+		return "redirect:/group?groupId=" + groupSelectedId;
+	}
+	
 	public void drawChart(MyUserDetails userDetails, Model model) {
 		// Chart Data
 		List<LoginCounter> logins = loginCounterRepository.findByUserOrderByDateAsc(userDetails.getUser());
@@ -264,6 +290,8 @@ public class Navigator {
 			@RequestParam(name = "groupId", required = false, defaultValue = "NA") String group,
 			Model model) {
 		
+		modelGlobal = model;
+		
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		
@@ -287,6 +315,7 @@ public class Navigator {
 
 		System.out.println(groupSelected.getName());
 		model.addAttribute("groupname", groupSelected.getName());
+		modelGlobal.addAttribute("groupSelectedId", groupSelected.getId().toString());
 		
 		List<Contact> cs = new ArrayList<>();
 		for (ContactGroup c : contacts) {

@@ -160,10 +160,17 @@ body{
     border-radius: 10px 0 0 10px;
     color: rgb(30, 0, 74);
 }
-#showed-groups a{
+#arrow-left{
 	color: rgb(30, 0, 74);
 	text-decoration: none;
 	margin-left: 80%;
+	cursor: pointer;
+	font-size: 25px;
+}
+#showed-groups #logo a{
+	color: red;
+	text-decoration: none;
+	cursor: pointer;
 	font-size: 25px;
 }
 #showed-groups h2{
