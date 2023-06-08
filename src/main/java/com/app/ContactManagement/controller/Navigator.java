@@ -3,13 +3,8 @@ package com.app.ContactManagement.controller;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
@@ -30,7 +25,6 @@ import com.app.ContactManagement.repository.ContactRepository;
 import com.app.ContactManagement.repository.GroupRepository;
 import com.app.ContactManagement.repository.LoginCounterRepository;
 import com.app.ContactManagement.repository.TrashRepository;
-import com.app.ContactManagement.repository.UserRepository;
 import com.app.ContactManagement.service.ContactServiceImpl;
 import com.app.ContactManagement.service.GroupServiceImpl;
 import com.app.ContactManagement.service.MyUserDetails;
@@ -55,9 +49,6 @@ public class Navigator {
 
 	@Autowired
 	private LoginCounterRepository loginCounterRepository;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private TrashRepository trashRepository;
@@ -121,7 +112,7 @@ public class Navigator {
 	public void showContacts(Model model) {
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
-		List<Contact> contacts = contactServiceImpl.findByUserId(userDetails.getUser());
+		Set<Contact> contacts = contactServiceImpl.findByUserId(userDetails.getUser());
 
 		String name = userDetails.getName();
 		model.addAttribute("user", name);
@@ -206,27 +197,9 @@ public class Navigator {
 			return "deleteContactPage";
 		}
 		System.out.println("Contact To delete: " + id);
-		Contact c = contactRepository.findByid(Long.parseLong(id));
-		List<ContactGroup> cg = contactGroupRepository.findBycontact(c);
-		for(ContactGroup con : cg) {
-			con.setContact(null);
-		}
-		contactGroupRepository.flush();
-		Trash t = new Trash();
-		t.setFirst_name(c.getFirst_name());
-		t.setLastName(c.getLast_name());
-		t.setAddress(c.getAddress());
-		t.setEmail_personal(c.getEmail_personal());
-		t.setEmail_professional(c.getEmail_professional());
-		t.setGender(c.getGender());
-		t.setUserId(c.getUserId().getId());
-		t.setPhone1(c.getPhone1());
-		t.setPhone2(c.getPhone2());
-
-		trashRepository.save(t);
-		contactRepository.delete(c);
-		contactRepository.flush();
-		trashRepository.flush();
+		
+		// Deleting a contact and save it in a Trash
+		contactServiceImpl.deleteContact(id);
 
 		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
@@ -251,32 +224,8 @@ public class Navigator {
 		}
 		showContacts(model);
 		drawChart(userDetails, model);
-		// Regex for Last Name
-		String lastNameRegex = "^[a-zA-Z]*$";
-		Pattern lastNamePattern = Pattern.compile(lastNameRegex);
-		// Matcher for Last Name
-		Matcher lastNameMatcher = lastNamePattern.matcher(query);
 
-		// Regex for phone number
-		String phoneRegex = "^[0-9]*$";
-		Pattern phonePattern = Pattern.compile(phoneRegex);
-		// Matcher for Last Name
-		Matcher phoneMatcher = phonePattern.matcher(query);
-
-		Set<Contact> contacts = null;
-		if (lastNameMatcher.matches()) {
-			contacts = contactRepository.findByUserIdAndLastNameContainingOrderByLastNameAsc(userDetails.getUser(),
-					query);
-		} else if (phoneMatcher.matches()) {
-			Set<Contact> contacts1 = contactRepository.findByUserIdAndPhone1ContainingOrderByLastNameAsc(userDetails.getUser(),
-					query);
-			
-			Set<Contact> contacts2 = contactRepository.findByUserIdAndPhone2ContainingOrderByLastNameAsc(userDetails.getUser(),
-					query);
-			contacts = new HashSet<>(contacts1);
-			contacts.addAll(contacts2);
-			
-		} 
+		Set<Contact> contacts = contactServiceImpl.searchContacts(query, userDetails.getUser()); 
 
 		for (Contact c : contacts) {
 			System.out.println(c.getLast_name());
@@ -325,28 +274,6 @@ public class Navigator {
 		return "groupsPage";
 	}
 
-	@GetMapping("/restore")
-	public String restore(@RequestParam(name = "trashId") String trashId, Model model) {
-		Trash t = trashRepository.findByid(Long.parseLong(trashId));
-
-		Contact c = new Contact();
-		c.setAddress(t.getAddress());
-		c.setEmail_personal(t.getEmail_personal());
-		c.setEmail_professional(t.getEmail_professional());
-		c.setFirst_name(t.getFirst_name());
-		c.setGender(t.getGender());
-		c.setLast_name(t.getLastName());
-		c.setPhone1(t.getPhone1());
-		c.setPhone2(t.getPhone2());
-		c.setUserId(userRepository.findByid(t.getUserId()));
-
-		contactRepository.save(c);
-		trashRepository.delete(t);
-		contactRepository.flush();
-		trashRepository.flush();
-
-		return "redirect:/delete";
-	}
 
 	@GetMapping("/update")
 	public String updateContactPage(

@@ -16,7 +16,7 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
 	
 	public Contact findByid(Long id);
 	
-	List<Contact> findByUserIdOrderByLastNameAsc(User user);
+	Set<Contact> findByUserIdOrderByLastNameAsc(User user);
 	
 	Set<Contact> findByUserIdAndLastNameContainingOrderByLastNameAsc(User user, String query);
 	

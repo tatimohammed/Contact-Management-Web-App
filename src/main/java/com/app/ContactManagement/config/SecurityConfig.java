@@ -19,16 +19,19 @@ import com.app.ContactManagement.service.MyUserDetailsService;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	// Core interface which loads user-specific data.
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return new MyUserDetailsService();
 	};
 	
+	// Implementation of PasswordEncoder that uses the BCrypt strong hashing function.
 	@Bean
 	public BCryptPasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
+	// An AuthenticationProvider implementation that retrieves user details from a UserDetailsService.
 	@Bean
 	public DaoAuthenticationProvider daoAuthenticationProvider() {
 		DaoAuthenticationProvider daoAP = new DaoAuthenticationProvider();
@@ -40,10 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(daoAuthenticationProvider());
+		auth.authenticationProvider(daoAuthenticationProvider()); // setting the authentication type
 		
 	}
 	
+	// securing the endpoints 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -67,11 +71,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.permitAll();
 		
 		
-	}
-	
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
 	}
 }
