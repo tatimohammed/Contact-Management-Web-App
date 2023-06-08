@@ -9,7 +9,7 @@ It is a useful tool for anyone who needs to manage a large number of contacts an
 #### Features
 - `NLP`, The search is optimized using the NLP Algorithm (`Min Edit Distance`).
 - `CRUD`, you can add, delete, update, restore and manage your contacts & groups.
-- `LOGS`, you can track your daily logging displayed as Char using `Char.js`.
+- `LOGGING TRACKER`, you can track your daily logging displayed as Char using `Char.js`.
 - `Multi-User`, The app support multi user feature by creating user account and manage your contacts.
 - `Security`, As this is Spring Boot Application we have used `Spring Security` to manage the users.
 
