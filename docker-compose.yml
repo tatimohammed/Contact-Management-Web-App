@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  mysql-app:
+    image: mysql:8.0.33
+    container_name: mysql_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 24042002
+      MYSQL_DATABASE: ContactManagementDB
+    ports:
+      - "3306:3306" 
+    networks:
+      - app-network
+
+  spring-boot-app:
+    image: contact_management_app:v1.0.3
+    container_name: contact_management_service
+    depends_on:
+     - mysql-app
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+networks:
+  app-network:

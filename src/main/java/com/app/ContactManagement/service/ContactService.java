@@ -1,6 +1,5 @@
 package com.app.ContactManagement.service;
 
-import java.util.List;
 import java.util.Set;
 
 import com.app.ContactManagement.model.Contact;
