@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: spring-boot-app
+    spec:
+      containers:
+        - name: spring-boot-container
+          image: tweetyx/contact_management_app:v1.0.5
+          ports:
+            - containerPort: 8080
+              name: spring-port
+          env:   # Setting Enviornmental Variables
+            - name: db_host
+              value: 10.244.1.17:3306
+            - name: db_name
+              value: ContactManagementDB
+            - name: db_username
+              value: root
+            - name: db_passwd
+              value: "24042002"
+
